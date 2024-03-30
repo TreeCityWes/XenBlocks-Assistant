@@ -13,7 +13,7 @@ Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python too
 ### Prerequisites:
 
 - Python 3.6 or later.
-- Vast.ai API key and configured account.
+- Vast.ai API key and wallet address in .env file
 
 ### Setup:
 
