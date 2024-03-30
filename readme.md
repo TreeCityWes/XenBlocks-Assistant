@@ -54,7 +54,11 @@ Follow the on-screen instructions to monitor your instances, terminate non-profi
 
 ### Support
 
-For support, visit [HashHead.io](https://hashhead.io) or support my work at [buymeacoffee.com/treecitywes](https://buymeacoffee.com/treecitywes).
+For support, visit [HashHead.io](https://hashhead.io)
+
+Or Buy Us A Coffee! 
+- Smit: [buymeacoffee.com/smit1237](https://buymeacoffee.com/smit1237)
+- Wes: [buymeacoffee.com/treecitywes](https://buymeacoffee.com/treecitywes)
 
 This project is designed to work with Smit1237's XenBlocks Template on Vast.ai. 
 For more details, refer to the template and Docker links provided.
