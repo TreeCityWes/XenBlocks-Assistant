@@ -46,7 +46,7 @@ Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python too
 Run the script from the command line:
 
 ```bash
-python xenblocks_assistant.py
+python vastmon.py
 ```
 
 Follow the on-screen instructions to monitor your instances, terminate non-profitable ones, or find new offers.
