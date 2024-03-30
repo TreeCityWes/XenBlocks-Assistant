@@ -28,6 +28,7 @@ Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python too
 
    ```bash
    pip install -r requirements.txt
+   pip install --upgrade vastai;
    ```
 
 3. **Configure .ENV File:**
