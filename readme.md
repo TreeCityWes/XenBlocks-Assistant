@@ -2,10 +2,6 @@
 
 Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant, a streamlined Python tool for optimizing cryptocurrency mining on Vast.ai. This script assists in monitoring instance stats, terminating non-profitable instances, and identifying new lucrative offers.
 
-![Splash Screen](https://user-images.githubusercontent.com/yourimageurl.png)
-
-Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant
-
 csharp
 Copy code
 - Remember to create .ENV file with Wallet Address and API variables
