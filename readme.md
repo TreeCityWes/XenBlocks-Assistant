@@ -2,46 +2,46 @@
 
 Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python tool optimizes cryptocurrency mining on Vast.ai, helping you monitor instance stats, terminate non-profitable instances, and discover new lucrative offers.
 
-## Features:
+## Features
 
 - **Monitor Instance Stats:** Automatically fetch and display key metrics from your mining instances.
 - **Kill Dead Instances:** Identify and terminate unprofitable instances, cutting unnecessary expenses.
 - **Find New Offers:** Use advanced filtering to uncover the most cost-effective mining opportunities on Vast.ai.
 
-## Getting Started:
+## Getting Started
 
-### Prerequisites:
+### Prerequisites
 
 - Python 3.6 or later.
-- Vast.ai API key and wallet address in .env file
+- A Vast.ai API key and wallet address configured via an .env file for secure access.
 
-### Setup:
+### Setup
 
 1. **Clone the repository:**
 
-```bash
-git clone https://github.com/TreeCityWes/XenBlocks-Assistant.git
-cd XenBlocks-Assistant
-```
+   ```bash
+   git clone https://github.com/TreeCityWes/XenBlocks-Assistant.git
+   cd XenBlocks-Assistant
+   ```
 
 2. **Install dependencies:**
 
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-3. **Configure .ENV file:**
+3. **Configure .ENV File:**
 
-Create a `.env` file in the root directory with the following variables:
+   Create a `.env` file in the root directory of the project with your Vast.ai API key and wallet address. This file should contain the following lines:
 
-```env
-API_KEY=your_vast_ai_api_key
-ADDR=your_wallet_address
-```
+   ```env
+   API_KEY=your_vast_ai_api_key
+   ADDR=your_wallet_address
+   ```
 
-Replace `your_vast_ai_api_key` and `your_wallet_address` with your actual Vast.ai API key and wallet address.
+   Replace `your_vast_ai_api_key` and `your_wallet_address` with the actual values you wish to use for mining.
 
-### Usage:
+### Usage
 
 Run the script from the command line:
 
@@ -51,8 +51,8 @@ python xenblocks_assistant.py
 
 Follow the on-screen instructions to monitor your instances, terminate non-profitable ones, or find new offers.
 
-### Support:
+### Support
 
-For support, visit [HashHead.io](https://HashHead.io) or support my work at [buymeacoffee.com/treecitywes](https://buymeacoffee.com/treecitywes).
+For support, visit [HashHead.io](https://hashhead.io) or support my work at [buymeacoffee.com/treecitywes](https://buymeacoffee.com/treecitywes).
 
 This project is designed to work with Smit1237's XenBlocks Template on Vast.ai. For more details, refer to the template and Docker links provided.
