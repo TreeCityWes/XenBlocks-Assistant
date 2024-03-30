@@ -53,13 +53,13 @@ def display_splash_screen():
 
 
 
-Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant 
+Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant. 
 
     - Remember to create .ENV file with Wallet Address and API variables
 
-    - Open-source with No Fee collection - https://github.com/TreeCityWes/XenBlocks-Assistant 
+    - Open-source with zero fee collection - https://github.com/TreeCityWes/XenBlocks-Assistant 
 
-    - Visit https://HashHead.io or https://buymeacoffee.com/treecitywes for more info
+    - Smit: https://www.buymeacoffee.com/smit1237 | Wes: https://www.buymeacoffee.com/treecitywes
 
 
 
@@ -70,6 +70,8 @@ This script is designed to work with Smit1237's XenBlocks Template on Vast.ai
     - Docker: https://hub.docker.com/r/smit1237/xen...
 
     - Vast.ai Sign-Up: https://cloud.vast.ai/?ref_id=88736
+
+    - More Information at https://hashhead.io
 
 
 \033[0m"""
