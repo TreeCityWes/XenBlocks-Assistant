@@ -8,6 +8,7 @@ from prettytable import PrettyTable
 import os
 from dotenv import load_dotenv
 import platform
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO)
 load_dotenv()  
@@ -89,18 +90,14 @@ def get_instances(api_key):
         response.raise_for_status()
         data = response.json()
         for instance in data.get('instances', []):
-            instance_id = instance.get('id')
-            public_ipaddr = instance.get('public_ipaddr', '').strip()
-            external_port = instance.get('ports', {}).get('8080/tcp', [{}])[0].get('HostPort', 'N/A')
-            cost_per_hour = instance.get('dph_total', 0)
-            gpu_name = instance.get('gpu_name', 'N/A')
-
             instances.append({
-                'id': instance_id,
-                'public_ipaddr': public_ipaddr,
-                'external_port': external_port,
-                'cost_per_hour': cost_per_hour,
-                'gpu_name': gpu_name
+                'id': instance.get('id'),
+                'public_ipaddr': instance.get('public_ipaddr', '').strip(),
+                'external_port': instance.get('ports', {}).get('8080/tcp', [{}])[0].get('HostPort', 'N/A'),
+                'cost_per_hour': instance.get('dph_total', 0),
+                'gpu_name': instance.get('gpu_name', 'N/A'),
+                'num_gpus': instance.get('num_gpus', 'N/A'),
+                'start_date': instance.get('start_date', 'N/A')
             })
     except requests.RequestException as e:
         logging.error(f"Error fetching instances: {e}")
@@ -130,8 +127,12 @@ def scrape_data_into_instance(instance, instance_stats):
         instance_stats[instance_id] = {"Status": "Error scraping data"}
         logging.error(f"Error scraping data from {ajax_url} for instance {instance_id}: {e}")
 
+from operator import itemgetter
+
+
+
 def display_instances_and_stats(instances):
-    headers = ["Instance ID", "GPU Type", "Cost", "Hashrate", "Hashrate/$", "XNM", "X.BLK", "XUNI", "Link"]
+    headers = ["Instance ID", "GPU Type", "Count", "Cost", "Hashrate", "Hashrate/$", "XNM", "X.BLK", "XUNI", "Rented Since", "Link"]
     table = PrettyTable()
     table.field_names = headers
     table.align = "l"
@@ -149,7 +150,13 @@ def display_instances_and_stats(instances):
         stats = instance.get('Data', {})
         status = instance.get('Status', 'Error')
         gpu_type = instance.get('gpu_name', 'N/A')
+        gpu_count = instance.get('num_gpus', 'N/A') 
         link = f"http://{instance.get('public_ipaddr')}:{instance.get('external_port')}" if instance.get('external_port') != 'N/A' else 'N/A'
+        start_date = instance.get('start_date', 'N/A')
+        
+        rental_since = 'N/A'
+        if start_date != 'N/A':
+            rental_since = datetime.fromtimestamp(float(start_date)).strftime('%Y-%m-%d %H:%M:%S')
 
         if status == "Loaded":
             hashrate_count = stats.get('hashrate_count', 0)
@@ -169,12 +176,14 @@ def display_instances_and_stats(instances):
             row = [
                 color_code + str(instance.get('id')) + "\033[0m",
                 color_code + str(gpu_type) + "\033[0m",
+                color_code + str(gpu_count) + "\033[0m",  
                 color_code + f"${cost:.3f}" + "\033[0m",
                 color_code + str(hashrate_count) + "\033[0m",
                 color_code + f"{hash_per_dollar:.2f}" + "\033[0m",
                 color_code + str(xnm) + "\033[0m",
                 color_code + str(xblk) + "\033[0m",
                 color_code + str(xuni) + "\033[0m",
+                color_code + rental_since + "\033[0m", 
                 color_code + link + "\033[0m"
             ]
         else:
@@ -182,12 +191,14 @@ def display_instances_and_stats(instances):
             row = [
                 color_code + str(instance.get('id')) + "\033[0m",
                 color_code + str(gpu_type) + "\033[0m",
+                color_code + str(gpu_count) + "\033[0m",  
                 color_code + f"${instance.get('cost_per_hour', 0):.3f}" + "\033[0m",
                 color_code + "-" + "\033[0m",
                 color_code + "-" + "\033[0m",
                 color_code + "-" + "\033[0m",
                 color_code + "-" + "\033[0m",
                 color_code + "-" + "\033[0m",
+                color_code + rental_since + "\033[0m",  
                 color_code + link + "\033[0m"
             ]
         
@@ -200,18 +211,19 @@ def display_instances_and_stats(instances):
     totals_row = [
         "\033[92mTotals\033[0m",
         "-",
+        "-",
         f"\033[92m${total_cost:.3f}\033[0m",
         f"\033[92m{total_hashrate}\033[0m",
         f"\033[92m{total_hashrate_per_dollar:.2f}\033[0m",
         f"\033[92m{total_xnm}\033[0m",
         f"\033[92m{total_xblk}\033[0m",
         f"\033[92m{total_xuni}\033[0m",
+        "-",
         "-"
     ]
     table.add_row(totals_row)
 
     print(table)
-
 
 
 def run_vastai_command(command):
@@ -227,11 +239,10 @@ def run_vastai_command(command):
     except subprocess.CalledProcessError as e:
         return {"success": False, "error": f"Command execution failed: {e}"}
 
-
 def display_instances_for_termination(instances):
     sorted_instances = sorted(instances, key=lambda x: -x.get('Hashrate_per_Dollar', 0))
 
-    headers = ["Number", "Instance ID", "GPU Type", "Cost", "Hashrate", "Hashrate/$", "XNM", "X.BLK", "XUNI", "Link"]
+    headers = ["Number", "Instance ID", "GPU Type", "Count", "Cost", "Hashrate", "Hashrate/$", "XNM", "X.BLK", "XUNI", "Rented Since", "Link"]
     table = PrettyTable()
     table.field_names = headers
     table.align = "l"
@@ -245,20 +256,36 @@ def display_instances_for_termination(instances):
         xblk = stats.get('superblock_count', 'N/A')
         xuni = stats.get('xuniblock_count', 'N/A')
         cost = instance.get('cost_per_hour', 'N/A')
+        gpu_count = instance.get('num_gpus', 'N/A')
+        start_timestamp = instance.get('start_date', 'N/A')
+        rental_age = 'N/A'
+        if start_timestamp != 'N/A':
+            rental_age = datetime.fromtimestamp(float(start_timestamp)).strftime('%Y-%m-%d %H:%M:%S')
 
-        color_code = get_color_for_hashrate_per_dollar(hash_per_dollar) if hashrate != 'N/A' else "\033[91m"
+        if hash_per_dollar == 'N/A' or hashrate == 'N/A' or hashrate == 0:
+            color_code = "\033[91m"  
+        elif hash_per_dollar < 20000:
+            color_code = "\033[93m"  
+        else:
+            color_code = "\033[92m"  
+
+        link = f"http://{instance.get('public_ipaddr')}:{instance.get('external_port')}" if instance.get('external_port') != 'N/A' else 'N/A'
+
+        hash_per_dollar_formatted = f"{hash_per_dollar:.2f}" if hash_per_dollar != 'N/A' else "N/A"
 
         row = [
             f"\033[0m{idx}\033[0m",
             color_code + str(instance['id']) + "\033[0m",
             color_code + str(instance.get('gpu_name', 'N/A')) + "\033[0m",
+            color_code + str(gpu_count) + "\033[0m",
             color_code + (f"${float(cost):.2f}" if cost != 'N/A' else "N/A") + "\033[0m",
             color_code + str(hashrate) + "\033[0m",
-            color_code + (f"{hash_per_dollar}" if hash_per_dollar != 'N/A' else "N/A") + "\033[0m",
+            color_code + hash_per_dollar_formatted + "\033[0m",  
             color_code + str(xnm) + "\033[0m",
             color_code + str(xblk) + "\033[0m",
             color_code + str(xuni) + "\033[0m",
-            color_code + (f"http://{instance.get('public_ipaddr')}:{instance.get('external_port')}" if instance.get('external_port') != 'N/A' else "N/A") + "\033[0m"
+            color_code + rental_age + "\033[0m",
+            color_code + link + "\033[0m"
         ]
         table.add_row(row)
 
@@ -382,35 +409,43 @@ def create_instance(offer_id, price):
 
     print(table)
 
-def search_top_offers(criterion='dph_total'):
-    query = "verified=false rented=false"
-    command = ["vastai", "search", "offers", query, "--interruptible", "--raw"]
-    offers = run_vastai_command(command)
-    if offers:
-        if criterion == 'dph_total':
-            sorted_offers = sorted(offers, key=lambda x: x.get(criterion, float('inf')))
-        else:
-            sorted_offers = sorted(offers, key=lambda x: x.get(criterion, float('-inf')), reverse=True)
-        return sorted_offers[:10]
-    return []
+def search_top_offers(criterion='dph_total', gpu_model='', max_bid=0.07):
+    query_parts = ["verified=false", "rented=false", f"min_bid <= {max_bid}"]
+    if gpu_model:
+        query_parts.append(f"gpu_name={gpu_model.replace(' ', '_')}")
+    query = " ".join(query_parts)
+    command = ["vastai", "search", "offers", query, "--type", "bid", "--raw"]
+    offers_response = run_vastai_command(command)
+
+    if isinstance(offers_response, list):
+        offers = offers_response
+        sorted_offers = sorted(offers, key=lambda x: float(x.get('dph_total', float('inf'))))
+        return sorted_offers[:20]
+    else:
+        print("Unexpected response format. Please ensure your command execution function is correct.")
+        return []
 
 def print_offers(offers):
     if not offers:
         print("No offers to display.")
         return
+
     table = PrettyTable()
-    table.field_names = ["Number", "ID", "GPU", "Price/hr", "Total TFLOPS", "TFLOPS/$", "Location"]
+    table.field_names = ["Number", "ID", "GPU", "Quantity", "Price/hr", "Total TFLOPS", "TFLOPS/$", "Location"]
     table.align = "l"
+
     for idx, offer in enumerate(offers, start=1):
-        table.add_row([
-            f"\033[92m{idx}\033[0m",
-            f"\033[92m{offer['id']}\033[0m",
-            f"\033[92m{offer['gpu_name'].replace('_', ' ')}\033[0m",
-            f"\033[92m${offer['dph_total']:.3f}\033[0m",
-            f"\033[92m{offer['total_flops']:.2f}\033[0m",
-            f"\033[92m{offer['flops_per_dphtotal']:.2f}\033[0m",
-            f"\033[92m{offer.get('geolocation', 'Unknown')}\033[0m"
-        ])
+        number = f"\033[92m{idx}\033[0m"
+        offer_id = f"\033[92m{offer['id']}\033[0m"
+        gpu = f"\033[92m{offer['gpu_name'].replace('_', ' ')}\033[0m"
+        quantity = f"\033[92m{offer.get('num_gpus', 'N/A')}\033[0m"
+        price_hr = f"\033[92m${offer['dph_total']:.3f}\033[0m"
+        total_tflops = f"\033[92m{offer['total_flops']:.2f}\033[0m"
+        tflops_per_dph = f"\033[92m{offer['flops_per_dphtotal']:.2f}\033[0m"
+        location = f"\033[92m{offer.get('geolocation', 'Unknown')}\033[0m"
+
+        table.add_row([number, offer_id, gpu, quantity, price_hr, total_tflops, tflops_per_dph, location])
+
     print(table)
 
 def parse_selection(input_str):
@@ -443,6 +478,8 @@ def main():
         print("2. Kill an Instance(s)")
         print("3. Buy an Instance")
         print("4. Exit")
+        print()
+
         choice = input("Enter your choice: ")
 
         if choice == "1":
@@ -452,46 +489,54 @@ def main():
             instances = get_instances_with_stats(API_KEY)
             handle_instance_termination(API_KEY, instances)
         elif choice == "3":
-            while True:  
-                print("\nSelect the type of top 10 GPU offers to view:")
+            while True:
+                print(" \n")
+                print("Search for the top 20 GPU offers under $0.07:\n")
                 print("1. Lowest Price/hr")
                 print("2. Highest Total TFLOPS")
-                print("3. Highest TFLOPS/$")
-                print("4. Exit to previous menu")
-                offer_type = input("Enter your choice: ").upper()  
+                print("3. Highest TFLOPS/$\n")
+                print("4. RTX A2000 Offers")
+                print("5. RTX A4000 Offers")
+                print("6. RTX A5000 Offers\n")
+                print("7. RTX 3060 Offers")
+                print("8. RTX 3060 Ti Offers")
+                print("9. RTX 3070 Offers\n")
+                print("10. Exit to previous menu")
+                print(" \n")
 
-                if offer_type == '4':
+
+                offer_type = input("Enter your choice: ").upper()
+
+                if offer_type == '10':
                     break  
 
-                criterion_map = {'1': 'dph_total', '2': 'total_flops', '3': 'flops_per_dphtotal'}
-                criterion = criterion_map.get(offer_type)
+                criterion = {'1': 'dph_total', '2': 'total_flops', '3': 'flops_per_dphtotal'}.get(offer_type, '')
+                gpu_model = {
+                    '4': 'RTX_A2000',
+                    '5': 'RTX_A4000',
+                    '6': 'RTX_A5000',
+                    '7': 'RTX_3060',
+                    '8': 'RTX_3060_Ti',
+                    '9': 'RTX_3070'
+                }.get(offer_type, '')
                 
-                if criterion:
-                    print(f"\nFetching the top 10 GPU offers based on {criterion}...")
-                    top_offers = search_top_offers(criterion)
-                    if top_offers:
-                        print_offers(top_offers)
-                        offer_selection = input("\nEnter the numbers of the offers to purchase, 'R' to refresh prices, or 'X' to exit to the previous menu: ").upper()
-
-                        if offer_selection == 'X':
-                            break  
-                        elif offer_selection == 'R':
-                            continue
-                        else:
-                            selected_indices = parse_selection(offer_selection)
-                            selected_offers = [top_offers[idx - 1] for idx in selected_indices if 1 <= idx <= len(top_offers)]
-                            
-                            for selected_offer in selected_offers:
-                                print(f"Purchasing offer ID {selected_offer['id']}...")
-                                print()
-                                print()
-                                create_instance(selected_offer['id'], selected_offer['dph_total'])
-                                print()
-                                print()
-                                
+                top_offers = search_top_offers(criterion=criterion, gpu_model=gpu_model)
+                print_offers(top_offers)
+                
+                offer_selection = input("\nEnter the numbers of the offers to purchase, 'R' to refresh prices, or 'X' to exit to the previous menu: ").upper()
+                if offer_selection == 'X':
+                    break
+                elif offer_selection == 'R':
+                    continue
                 else:
-                    print("Invalid option, please try again.")
-
+                    selected_indices = parse_selection(offer_selection)
+                    for index in selected_indices:
+                        if 1 <= index <= len(top_offers):
+                            selected_offer = top_offers[index - 1] 
+                            print(f"Purchasing offer ID {selected_offer['id']}...")
+                            create_instance(selected_offer['id'], selected_offer['dph_total'])
+                        else:
+                            print(f"Invalid selection: {index}. Please try again.")
         elif choice == "4":
             print("Exiting...")
             break
