@@ -29,6 +29,11 @@ Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python too
    ```bash
    pip install -r requirements.txt
    pip install --upgrade vastai;
+   Login to Vast.ai API CLI: vastai set apikey (your API key)
+
+![image](https://github.com/TreeCityWes/XenBlocks-Assistant/assets/93751858/baf6dee5-b940-4690-a7bc-360411f6e2e8)
+
+   
    ```
 
 3. **Configure .ENV File:**
