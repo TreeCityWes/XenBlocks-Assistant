@@ -55,8 +55,7 @@ python vastmon.py
 
 Follow the on-screen instructions to monitor your instances, terminate non-profitable ones, or find new offers.
 
-First, install some required libraries by following the first two steps at:
-https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+First, install required libraries. See first two steps at https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 
 Install Docker:
 ```bash
