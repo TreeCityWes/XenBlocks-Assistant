@@ -51,38 +51,35 @@ Run the script from the command line:
 python vastmon.py
 ```
 
-### Running Image On Local Machine 
+# Running Image On Local Machine (Baremetal)
 
 Follow the on-screen instructions to monitor your instances, terminate non-profitable ones, or find new offers.
 
-```bash
-# First, install some required libraries by following the first two steps at:
-# https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+First, install some required libraries by following the first two steps at:
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 
-
-# Install Docker
+Install Docker:
 ```bash
 sudo apt install docker.io
 ```
-# After installation, add your user to the Docker group
+
+After installation, add your user to the Docker group:
 ```bash
 sudo usermod -aG docker your_username
 ```
 
-# Reboot the machine (safest way)
+Reboot the machine (safest way):
 ```bash
 sudo reboot
 ```
 
-# Execute the Docker command with your Xenblocks address. Make sure to replace 'your_username' with your actual username
-# and 'your_xenblocks_address' with your actual Xenblocks address.
+Execute the Docker command with your Xenblocks address. Make sure to replace 'your_username' with your actual username and 'your_xenblocks_address' with your actual Xenblocks address:
 ```bash
 docker run -it -d --restart unless-stopped -p 2222:22 -p 8080:8080 -p 8000:8000 --gpus=all -e ADDR=your_xenblocks_address smit1237/xengpuminer:vast
 ```
-# This command downloads an image (3.7 gigabytes in size) with all you need to mine. 
-# After it's done, it will start mining. You can observe a nice and simple web UI on http://your_mining_machine_ip:8080.
-# You can safely reboot the machine; mining will start automatically unless you stop it.
-```
+
+This command downloads an image (3.7 gigabytes in size) with all you need to mine. After it's done, it will start mining. You can observe a nice and simple web UI on http://your_mining_machine_ip:8080. You can safely reboot the machine; mining will start automatically unless you stop it.
+
 
 ### Support
 
