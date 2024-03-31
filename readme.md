@@ -33,7 +33,8 @@ Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python too
 
    vastai set apikey (your API key)
    
-![image](https://github.com/TreeCityWes/XenBlocks-Assistant/assets/93751858/824696e7-6d0a-437d-b905-4ce60261be16)
+  ![image](https://github.com/TreeCityWes/XenBlocks-Assistant/assets/93751858/bdfb2499-0cd7-405a-a552-a0330c6690cc)
+
 
    
    ```
