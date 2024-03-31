@@ -18,33 +18,25 @@ Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python too
 ### Setup
 
 1. **Clone the repository:**
-
    ```bash
    git clone https://github.com/TreeCityWes/XenBlocks-Assistant.git
    cd XenBlocks-Assistant
    ```
 
 2. **Install dependencies:**
-
    ```bash
    pip install -r requirements.txt
-   
-   pip install --upgrade vastai;
-
+   pip install --upgrade vastai
    vastai set apikey (your API key)
-   
-  ![image](https://github.com/TreeCityWes/XenBlocks-Assistant/assets/93751858/bdfb2499-0cd7-405a-a552-a0330c6690cc)
-
-
-   
    ```
 
-3. **Configure .ENV File:**
+   ![image](https://github.com/TreeCityWes/XenBlocks-Assistant/assets/93751858/bdfb2499-0cd7-405a-a552-a0330c6690cc)
 
+3. **Configure .ENV File:**
    Create a `.env` file in the root directory of the project with your Vast.ai API key and wallet address.
 
-This file should contain the following lines:
-
+   This file should contain the following lines:
+   ```
    API_KEY=your_vast_ai_api_key
    ADDR=your_wallet_address
    ```
@@ -54,14 +46,12 @@ This file should contain the following lines:
 ### Usage
 
 Run the script from the command line:
-
 ```bash
 python vastmon.py
 ```
-
 Follow the on-screen instructions to monitor your instances, terminate non-profitable ones, or find new offers.
 
-###Running Image On Local Machine 
+### Running Image On Local Machine 
 ```bash
 # First, install some required libraries by following the first two steps at:
 # https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
@@ -83,9 +73,6 @@ docker run -it -d --restart unless-stopped -p 2222:22 -p 8080:8080 -p 8000:8000 
 # After it's done, it will start mining. You can observe a nice and simple web UI on http://your_mining_machine_ip:8080.
 # You can safely reboot the machine; mining will start automatically unless you stop it.
 ```
-
-
-
 
 ### Support
 
