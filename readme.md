@@ -1,6 +1,6 @@
 # Vast.ai XenBlocks Mining Assistant
 
-Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python tool optimizes cryptocurrency mining on Vast.ai, helping you monitor instance stats, terminate non-profitable instances, and discover new lucrative offers.
+Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python tool optimizes XenBlocks X1 mining on Vast.ai, helping you monitor instance stats, terminate non-profitable instances, and discover new lucrative offers.
 
 ## Features
 
@@ -33,6 +33,7 @@ Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python too
    ![image](https://github.com/TreeCityWes/XenBlocks-Assistant/assets/93751858/bdfb2499-0cd7-405a-a552-a0330c6690cc)
 
 3. **Configure .ENV File:**
+
    Create a `.env` file in the root directory of the project with your Vast.ai API key and wallet address.
 
    This file should contain the following lines:
