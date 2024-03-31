@@ -37,9 +37,10 @@ Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python too
 
 3. **Configure .ENV File:**
 
-   Create a `.env` file in the root directory of the project with your Vast.ai API key and wallet address. This file should contain the following lines:
+   Create a `.env` file in the root directory of the project with your Vast.ai API key and wallet address.
 
-   ```env
+This file should contain the following lines:
+
    API_KEY=your_vast_ai_api_key
    ADDR=your_wallet_address
    ```
