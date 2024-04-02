@@ -53,7 +53,7 @@ python vastmon.py
 
 # Running Image On Local Machine (Baremetal)
 
-Follow the on-screen instructions to monitor your instances, terminate non-profitable ones, or find new offers.
+Follow these instructions to setup Smit's XenBlocks docker template on baremetal/local machine instead of Vast cloud instance. 
 
 First, install required libraries. See first two steps at https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 
