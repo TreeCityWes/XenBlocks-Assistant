@@ -90,10 +90,13 @@ def get_instances(api_key):
         response.raise_for_status()
         data = response.json()
         for instance in data.get('instances', []):
+            external_port = 'N/A'
+            if instance.get('ports') is not None and instance['ports'].get('8080/tcp') is not None:
+                external_port = instance['ports']['8080/tcp'][0].get('HostPort', 'N/A')
             instances.append({
                 'id': instance.get('id'),
                 'public_ipaddr': instance.get('public_ipaddr', '').strip(),
-                'external_port': instance.get('ports', {}).get('8080/tcp', [{}])[0].get('HostPort', 'N/A'),
+                'external_port': external_port,
                 'cost_per_hour': instance.get('dph_total', 0),
                 'gpu_name': instance.get('gpu_name', 'N/A'),
                 'num_gpus': instance.get('num_gpus', 'N/A'),
