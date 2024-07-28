@@ -1,6 +1,6 @@
 # Vast.ai XenBlocks Mining Assistant
 
-Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python tool optimizes XenBlocks X1 mining on Vast.ai, helping you monitor instance stats, terminate non-profitable instances, and discover new lucrative offers.
+Welcome to TreeCityWes.eth's Vast.ai XenBlocks Mining Assistant! This Python tool optimizes XenBlocks X1 mining on Vast.ai, helping you monitor instance stats, terminate non-profitable instances, and discover new lucrative offers. Sign up for Vast Cloud GPU Rental here: https://cloud.vast.ai/?ref_id=130895
 
 ## Features
 
